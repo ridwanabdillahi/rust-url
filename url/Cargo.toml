@@ -20,9 +20,15 @@ rust-version = "1.45"
 travis-ci = { repository = "servo/rust-url" }
 appveyor = { repository = "Manishearth/rust-url" }
 
+[build-dependencies]
+rustc_version = "0.4"
+
 [dev-dependencies]
 serde_json = "1.0"
 bencher = "0.1"
+# To test debugger visualizers defined for the url crate such as url.natvis
+debugger_test = "0.1"
+debugger_test_parser = "0.1"
 
 [dependencies]
 form_urlencoded = { version = "1.0.0", path = "../form_urlencoded" }
@@ -32,8 +38,14 @@ serde = {version = "1.0", optional = true, features = ["derive"]}
 
 [features]
 default = ["idna"]
+# Enable to use the #[debugger_visualizer] attribute.
 
 [[bench]]
 name = "parse_url"
 path = "benches/parse_url.rs"
 harness = false
+
+[[test]]
+name = "debugger_visualizer"
+path = "tests/debugger_visualizer.rs"
+test = false
