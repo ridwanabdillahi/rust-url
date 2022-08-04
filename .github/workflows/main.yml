@@ -39,12 +39,17 @@ jobs:
         with:
           command: build
           args: --all-targets
-      - uses: actions-rs/cargo@v1
+        # Run tests
+      - name: Run tests
+        uses: actions-rs/cargo@v1
         with:
           command: test
-          # Manually select the features to enable for testing (in addition to default features)
-          # so unstable features are not included.
-          args: --features "url/serde"
+        # Run tests enabling the serde feature
+      - name: Run url tests with the serde feature
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --manifest-path url/Cargo.toml --features "serde"
       # The #[debugger_visualizer] attribute is currently gated behind an unstable feature flag.
       # In order to test the visualizers for the url crate, they have to be tested on a nightly build.
       - name: Run debugger_visualizer tests
@@ -54,7 +59,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: test
-          args: --test debugger_visualizer --features "url/serde,url/debugger_visualizer" -- --test-threads=1
+          args: --test debugger_visualizer --manifest-path url/Cargo.toml --features "serde,debugger_visualizer" -- --test-threads=1
 
   WASM:
     runs-on: ubuntu-latest
